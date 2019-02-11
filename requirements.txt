@@ -1,0 +1,10 @@
+Django
+django-crispy-forms
+django-extensions
+ipython
+Pillow
+pydotplus
+Werkzeug
+factory_boy
+django-debug-toolbar
+

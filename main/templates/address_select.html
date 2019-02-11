@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+# Needed for the Materialze Select 
+<script>
+ $(document).ready(function() {
+   $('select').attr("class", "browser-default")
+});
+</script>
+
+  <h2>Select the billing/shipping addresses</h2>
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <a class="btn btn-primary" href="{% url "address_create" %}">Add a new one</a>
+  </form>
+{% endblock content %}

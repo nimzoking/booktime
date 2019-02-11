@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+
+# Needed for the Materialze Select 
+<script>
+ $(document).ready(function() {
+   $('select').attr("class", "browser-default")
+});
+</script>
+
+<h2>Add a new address</h2>
+
+  <form method="POST">
+  <div class="col s12 z-depth-4 card-panel">  
+    {% csrf_token %}
+    {{ form.as_p }}
+  </div>
+    <button type="submit" class ="waves-effect light-blue btn"><i class="material-icons right">send</i>Submit</button>
+  </form>
+ 
+{% endblock content %}
+
