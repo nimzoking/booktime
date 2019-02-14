@@ -88,4 +88,9 @@ urlpatterns = [
         views.AddressSelectionView.as_view(),
         name="address_select",
     ),
+    path(
+        "order-dashboard/",
+        views.OrderView.as_view(),
+        name="order_dashboard",
+    ),
 ]

@@ -1,13 +1,13 @@
 {% extends "base.html" %}
-
 {% block content %}
-  <h2>Contact us</h2>
+  <h4>Contact us</h4>
   <p>Please fill the form below to contact us</p>
   <form method="POST">
-  <div class="col s12 z-depth-4 panel-card"> 
-      {% csrf_token %}
-      {{ form }}
-  </div>
-    <button type="submit" class ="waves-effect light-blue btn">Contact Us</button>
-    </form>
+    <div class="col s12 z-depth-4 card-panel"> 
+    {% csrf_token %}
+    {% include "includes/field.html" with field=form.name %}
+    {% include "includes/field.html" with field=form.message %}
+    <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+  </form>
 {% endblock content %}

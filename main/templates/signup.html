@@ -1,60 +1,14 @@
 {% extends "base.html" %}
-
-{% block content %} 
-<h2> Sign up </h2> 
-<p> Please complete the form below, to create a new account. </p> 
-<h4>Booktime Create Account</h4>	
-<p></p>
-<form method="POST">
-	{% csrf_token %}
-	<div class="col s12 z-depth-4 card-panel">     
-	<div class="form-group">
-		{{ form.email.label_tag }}
-	    <input 
-            type="email"
-	        class="form-control {% if form.email.errors %} is-invalid {% endif %}"
-	        id="id_email"
-            name="email"
-            placeholder="Your email"
-            value="{{ form.email.value | default:"" }}">
-		{% if form.email.errors %}
-			<div class ="invalid-feedback">
-				{{ form.email.errors }}
-			</div >        
-		{% endif %}
-	</div>
-	<div class="form-group">
-		{{ form.password1.label_tag }}
-		<input type="password"
-	    	class="form-control {% if form.password1.errors %} is-invalid {% endif %}" 
-			id="id_password1"             
-			name="password1"             
-			value="{{ form.password1.value | default:"" }}">        
-			{% if form.password1.errors %}             
-				<div class="invalid-feedback">
-	               {{ form.password1.errors }}
-	            </div>        
-			{% endif %}     
-	</div>
-	<div class="form-group">
-	   {{ form.password2.label_tag }}
-	   <input type="password"
-        class="form-control{% if form.password2.errors %} is-invalid {% endif %}"             
-		id="id_password2"             
-		name="password2"             
-		value="{{ form.password2.value | default:"" }}">
-		       {% if form.password2.errors %}             
-					<div class="invalid-feedback">
-		               {{ form.password2.errors }}
-		            </div >
-		       {% endif %}
-	</div>
-	</div>
-	<button type="submit" class ="waves-effect light-blue btn">Create Account</button>
-</form>
-<div class="input-field col s12">
-	<p class="margin center medium-small sign-up">Already have an account? <a href="/login">Login</a></p>
-</div>
-
+{% block content %}
+  <h4>Sign up</h4>
+  <p>Please fill the form below.</p>
+  <form method="POST">
+    {% csrf_token %}
+    <div class="col s12 z-depth-4 card-panel">  
+    {% include "includes/field.html" with field=form.email %}
+    {% include "includes/field.html" with field=form.password1 %}
+    {% include "includes/field.html" with field=form.password2 %}
+    <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+  </form>
 {% endblock content %}
-
