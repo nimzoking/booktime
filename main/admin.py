@@ -4,7 +4,7 @@ from django.contrib.auth.admin import (UserAdmin as DjangoUserAdmin)
 
 from . import models 
 
-class ProductAdmin( admin.ModelAdmin):
+class ProductAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug', 'in_stock', 'price')
     list_filter = ('active', 'in_stock', 'date_updated')
     list_editable = ('in_stock', )
@@ -14,7 +14,7 @@ class ProductAdmin( admin.ModelAdmin):
 
 admin.site.register(models.Product,ProductAdmin) 
 
-class ProductTagAdmin( admin.ModelAdmin):
+class ProductTagAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')
     list_filter = ('active',)
     search_fields = ('name',)
@@ -23,7 +23,7 @@ class ProductTagAdmin( admin.ModelAdmin):
 
 admin.site.register(models.ProductTag,ProductTagAdmin) 
 
-class ProductImageAdmin( admin.ModelAdmin):
+class ProductImageAdmin(admin.ModelAdmin):
     list_display = ('thumbnail_tag', 'product_name')
     readonly_fields = ('thumbnail',)
     search_fields = ('product__name',)
@@ -39,6 +39,8 @@ class ProductImageAdmin( admin.ModelAdmin):
         return obj.product.name
 
 admin.site.register(models.ProductImage,ProductImageAdmin)
+
+@admin.register(models.User)
 
 class UserAdmin(DjangoUserAdmin):
     fieldsets = (

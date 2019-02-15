@@ -9,3 +9,7 @@ ipython-genutils==0.2.0
 Pillow==5.4.1
 pydotplus==2.0.2
 Werkzeug==0.14.1
+djangorestframework
+django-widget-tweaks
+django-tables2
+django-filter
