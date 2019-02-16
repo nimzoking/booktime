@@ -11,7 +11,7 @@
       <hr>
     {% endif %}
   {% endfor %}
-  <nav>
+  {% comment %} <nav> {% endcomment %}
     <ul class="pagination">
       {% if page_obj.has_previous %}
         <li class="page-item">
@@ -27,7 +27,7 @@
       {% for pagenum in page_obj.paginator.page_range %}
         <li
           class="page-item{% if page_obj.number == pagenum %} active{% endif %}">
-          <a class="page-link" href="?page={{pagenum}}">{{pagenum}}</a>
+          <a class="page-link blue" href="?page={{pagenum}}">{{pagenum}}</a>
         </li>
       {% endfor %}
       {% if page_obj.has_next %}
@@ -40,5 +40,5 @@
         </li>
       {% endif %}
     </ul>
-  </nav>
+  {% comment %} </nav> {% endcomment %}
 {% endblock content %}

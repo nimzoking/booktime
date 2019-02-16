@@ -14,7 +14,7 @@
   <form method="POST">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Submit</button>
-    <a class="btn btn-primary" href="{% url "address_create" %}">Add a new one</a>
+    <button type="submit" class="btn blue">Submit</button>
+    <a class="btn blue" href="{% url "address_create" %}">Add a new one</a>
   </form>
 {% endblock content %}
