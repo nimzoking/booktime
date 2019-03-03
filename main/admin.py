@@ -10,33 +10,35 @@ from django.db.models.functions import TruncDay
 from django.db.models import Avg, Count, Min, Sum
 from django.urls import path
 from django.template.response import TemplateResponse
-# from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render
 
-# from django.http import HttpResponse
-# from django.template.loader import render_to_string
-# from weasyprint import HTML
-# import tempfile
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from weasyprint import HTML, CSS
+import tempfile
 
 from . import models
+
+from django.conf import settings
 
 
 logger = logging.getLogger(__name__)
 
 
-# def make_active(self, request, queryset):
-#     queryset.update(active=True)
+def make_active(self, request, queryset):
+    queryset.update(active=True)
 
 
-# make_active.short_description = "Mark selected items as active"
+make_active.short_description = "Mark selected items as active"
 
 
-# def make_inactive(self, request, queryset):
-#     queryset.update(active=False)
+def make_inactive(self, request, queryset):
+    queryset.update(active=False)
 
 
-# make_inactive.short_description = (
-#     "Mark selected items as inactive"
-# )
+make_inactive.short_description = (
+    "Mark selected items as inactive"
+)
 
 
 class ProductAdmin(admin.ModelAdmin):
@@ -46,7 +48,7 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ("name",)
     prepopulated_fields = {"slug": ("name",)}
     autocomplete_fields = ("tags",)
-    # actions = [make_active, make_inactive]
+    actions = [make_active, make_inactive]
 
     def get_readonly_fields(self, request, obj=None):
         if request.user.is_superuser:
@@ -396,55 +398,42 @@ class ReportingColoredAdminSite(ColoredAdminSite):
         return super().index(request, extra_context)
 
 
-# class InvoiceMixin:
-#     def get_urls(self):
-#         urls = super().get_urls()
-#         my_urls = [
-#             path(
-#                 "invoice/<int:order_id>/",
-#                 self.admin_view(self.invoice_for_order),
-#                 name="invoice",
-#             )
-#         ]
-#         return my_urls + urls
+class InvoiceMixin:
+    def get_urls(self):
+        urls = super().get_urls()
+        my_urls = [
+            path(
+                "invoice/<int:order_id>/",
+                self.admin_view(self.invoice_for_order),
+                name="invoice",
+            )
+        ]
+        return my_urls + urls
 
-#     def invoice_for_order(self, request, order_id):
-#         order = get_object_or_404(models.Order, pk=order_id)
+    def invoice_for_order(self, request, order_id):
+        order = get_object_or_404(models.Order, pk=order_id)
 
-#         if request.GET.get("format") == "pdf":
-#             html_string = render_to_string(
-#                 "invoice.html", {"order": order}
-#             )
-#             html = HTML(
-#                 string=html_string,
-#                 base_url=request.build_absolute_uri(),
-#             )
-
-#             result = html.write_pdf()
-
-#             response = HttpResponse(
-#                 content_type="application/pdf"
-#             )
-#             response[
-#                 "Content-Disposition"
-#             ] = "inline; filename=invoice.pdf"
-#             response["Content-Transfer-Encoding"] = "binary"
-#             with tempfile.NamedTemporaryFile(
-#                 delete=True
-#             ) as output:
-#                 output.write(result)
-#                 output.flush()
-#                 output = open(output.name, "rb")
-#                 binary_pdf = output.read()
-#                 response.write(binary_pdf)
-
-#             return response
-
-#         return render(request, "invoice.html", {"order": order})
+        if request.GET.get("format") == "pdf":
+            html_string = render_to_string("invoice.html", {"order": order})
+            html = HTML(string=html_string,base_url=request.build_absolute_uri(),)
+            result = html.write_pdf()
+            # result = html.write_pdf(stylesheets=[CSS(settings.BASE_DIR + '/main/static/css/bootstrap.min.css')],presentational_hints=True)
+            response = HttpResponse(result, content_type="application/pdf")
+            response["Content-Disposition"] = "inline; filename=invoice.pdf"
+            response["Content-Transfer-Encoding"] = "binary"
+            with tempfile.NamedTemporaryFile(delete=True) as output:
+                output.write(result)
+                output.flush()
+                output = open(output.name, "rb")
+                binary_pdf = output.read()
+                response.write(binary_pdf)
+            
+            return response
+        return render(request, "invoice.html", {"order": order})
 
 
 class OwnersAdminSite(
-    # InvoiceMixin, 
+    InvoiceMixin, 
     ReportingColoredAdminSite):
     site_header = "BookTime owners administration"
     site_header_color = "black"
@@ -457,7 +446,7 @@ class OwnersAdminSite(
 
 
 class CentralOfficeAdminSite(
-    # InvoiceMixin, 
+    InvoiceMixin, 
     ReportingColoredAdminSite
 ):
     site_header = "BookTime Central Office Administration"

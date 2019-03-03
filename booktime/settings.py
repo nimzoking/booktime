@@ -11,21 +11,44 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+import environ
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
+env.read_env('.env')
+
+DEBUG = env('DEBUG')
+
+REDIS_URL = env('REDIS_URL')
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {"hosts": [REDIS_URL]},
+    }
+}
+
+# DATABASES = {
+#     "default": env.db()
+# }
+
+# if DEBUG:
+#     ALLOWED_HOSTS = ['*']
+# else:
+#     ALLOWED_HOSTS = ['booktime.dokku.domain', 'localhost']
+
+EMAIL_CONFIG = env.email_url('EMAIL_URL')
+vars().update(EMAIL_CONFIG)
+
+SECRET_KEY = env('SECRET_KEY')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 't4o05x-s*hgftlv1ey7(9f(^#5otxu%zrttxzfeyq(*j=@5vzb'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-
-DEBUG = True
 
 ALLOWED_HOSTS = ['localhost','127.0.0.1']
 
